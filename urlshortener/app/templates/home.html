@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener - Make Long URLs Short & Sweet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: radial-gradient(circle at 30% 20%, #000000 0%, #0a0a0a 25%, #111111 50%), 
+                        radial-gradient(circle at 70% 80%, #1a1a1a 0%, #000000 25%, transparent 50%),
+                        linear-gradient(135deg, #000000 0%, #0f0f0f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="%23333333" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(0.5deg); }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 107, 53, 0.6);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 107, 53, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            padding: 48px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 107, 53, 0.05) 100%);
+            border-radius: 24px;
+            pointer-events: none;
+        }
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 4em;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff, #e5e5e5, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            color: #ffffff;
+            margin-bottom: 12px;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #e5e5e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            font-size: 1.1em;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        .url-form {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 107, 53, 0.4);
+            padding: 32px;
+            border-radius: 20px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="url"] {
+            width: 100%;
+            padding: 18px 24px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+        
+        input[type="url"]:focus {
+            outline: none;
+            border-color: rgba(255, 107, 53, 0.8);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 0 0 4px rgba(255, 107, 53, 0.2),
+                0 8px 32px rgba(255, 107, 53, 0.3);
+        }
+        
+        input[type="url"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .shorten-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 18px 48px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            width: 100%;
+            margin-top: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shorten-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .shorten-btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .shorten-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 16px 40px rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        .shorten-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .auth-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 28px;
+            margin-top: 28px;
+        }
+        
+        .user-welcome {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 18px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 14px 24px;
+            border-radius: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 140px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-link:hover::before {
+            opacity: 1;
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 12px 32px rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link.logout {
+            background: rgba(220, 53, 69, 0.1);
+            border-color: rgba(220, 53, 69, 0.3);
+        }
+        
+        .nav-link.logout::before {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(200, 35, 51, 0.2));
+        }
+        
+        .nav-link.logout:hover {
+            border-color: rgba(220, 53, 69, 0.5);
+            box-shadow: 
+                0 12px 32px rgba(220, 53, 69, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        .auth-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        
+        .auth-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 14px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .auth-link:hover::before {
+            opacity: 1;
+        }
+        
+        .auth-link:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 12px 32px rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .auth-link.firebase-auth {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+        
+        .auth-link.firebase-auth::before {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(247, 147, 30, 0.3));
+        }
+        
+        .auth-link.firebase-auth:hover {
+            border-color: rgba(255, 107, 53, 0.5);
+            box-shadow: 
+                0 12px 32px rgba(255, 107, 53, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        .logout-link {
+            color: rgba(220, 53, 69, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 12px;
+            display: none; /* Hide the old logout link */
+        }
+        
+        .messages {
+            margin-bottom: 24px;
+        }
+        
+        .message {
+            background: rgba(40, 167, 69, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin-bottom: 12px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 32px rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff, #e5e5e5, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .feature-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-link {
+                min-width: 200px;
+            }
+            
+            .auth-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Shortener</h1>
+        <p class="subtitle">Transform long URLs into short, shareable links</p>
+        
+        <form method="post" class="url-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_original_url">Enter your long URL</label>
+                <input type="url" name="original_url" placeholder="https://example.com/very-long-url" id="id_original_url" required>
+            </div>
+            <button type="submit" class="shorten-btn">Shorten URL</button>
+        </form>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="auth-section">
+            {% if user.is_authenticated %}
+                <div class="user-welcome">
+                    <strong>Welcome back, {{ user.username }}!</strong>
+                </div>
+                <div class="nav-links">
+                    <a href="{% url 'list_urls' %}" class="nav-link">My URLs</a>
+                    <a href="{% url 'analytics_dashboard' %}" class="nav-link">Analytics</a>
+                    <a href="{% url 'logout' %}" class="nav-link logout">Logout</a>
+                </div>
+            {% else %}
+                <div class="auth-links">
+                    <a href="{% url 'login' %}" class="auth-link">Login</a>
+                    <a href="{% url 'register' %}" class="auth-link">Register</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
