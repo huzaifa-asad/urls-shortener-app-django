@@ -320,7 +320,7 @@ If you encounter any issues or have questions:
 
 If you find this project useful, please consider giving it a star! ⭐
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/django-url-shortener?style=social)](https://github.com/yourusername/django-url-shortener/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/huzaifazz/django-url-shortener?style=social)](https://github.com/huzaifazz/django-url-shortener/stargazers)
 
 ---
 
