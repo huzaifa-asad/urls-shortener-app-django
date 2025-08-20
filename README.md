@@ -280,9 +280,13 @@ Key settings in `settings.py`:
 
 If you find this project useful, please consider giving it a star! ⭐
 
-[![GitHub stars](https://img.shields.io/github/stars/huzaifazz/django-url-shortener?style=social)](https://github.com/huzaifazz/django-url-shortener/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/huzaifa-asad/django-url-shortener?style=social)](https://github.com/huzaifazz/django-url-shortener/stargazers)
 
 ---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### Made with ❤️ and Django
 
