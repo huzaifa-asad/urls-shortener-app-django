@@ -64,7 +64,7 @@ A modern, feature-rich URL shortening service built with Django, featuring a bea
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/django-url-shortener.git
+   git clone https://github.com/huzaifa-asad/django-url-shortener.git
    cd django-url-shortener
    ```
 
