@@ -30,7 +30,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 If you encounter any issues or have questions:
 
-1. **Check existing issues**: Look through [GitHub Issues](https://github.com/huzaifazz/django-url-shortener/issues)
+1. **Check existing issues**: Look through [GitHub Issues](https://github.com/huzaifa-asad/django-url-shortener/issues)
 2. **Create a new issue**: If your problem isn't covered, create a new issue
 3. **Contact**: Reach out via email or social media
 
