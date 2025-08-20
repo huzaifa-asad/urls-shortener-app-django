@@ -19,10 +19,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Add comments for complex logic
 - Write tests for new features
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - **Django Framework**: For the robust web framework
@@ -37,3 +33,7 @@ If you encounter any issues or have questions:
 1. **Check existing issues**: Look through [GitHub Issues](https://github.com/huzaifazz/django-url-shortener/issues)
 2. **Create a new issue**: If your problem isn't covered, create a new issue
 3. **Contact**: Reach out via email or social media
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
