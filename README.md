@@ -185,6 +185,7 @@ django-url-shortener/
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
+
 | `/` | GET, POST | Homepage - Create short URLs |
 | `/login/` | GET, POST | User login |
 | `/register/` | GET, POST | User registration |
@@ -208,7 +209,7 @@ Create a `.env` file in the project root for production settings:
 DEBUG=False
 SECRET_KEY=your-secret-key-here
 ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-DATABASE_URL=sqlite:///db.sqlite3
+DATABASE_URL=postgresql://neondb_owner:your-password@your-neon-host/neondb?sslmode=require
 ```
 
 ### Settings Customization
