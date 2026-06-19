@@ -406,11 +406,11 @@
             
             <div class="url-result">
                 <div class="url-label">Your shortened URL:</div>
-                <div class="shortened-url" id="shortenedUrl">http://{{ request.get_host }}/{{ short_code }}/</div>
+                <div class="shortened-url" id="shortenedUrl">{{ short_url }}</div>
                 
                 <div class="copy-section">
                     <button onclick="copyToClipboard()" class="copy-btn">Copy URL</button>
-                    <a href="http://{{ request.get_host }}/{{ short_code }}/" target="_blank" class="visit-btn">Visit URL</a>
+                    <a href="{{ short_url }}" target="_blank" class="visit-btn">Visit URL</a>
                     {% if url_obj %}
                         <a href="{% url 'qr_code_page' url_obj.short_code %}" class="qr-btn">Generate QR Code</a>
                     {% endif %}

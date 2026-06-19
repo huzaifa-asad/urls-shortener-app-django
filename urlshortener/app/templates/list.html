@@ -723,7 +723,7 @@
                                 </a>
                             </div>
                             <div class="actions">
-                                <button onclick="copyToClipboard('{{ request.get_host }}/{{ url.short_code }}/')" class="copy-btn">
+                                <button onclick="copyToClipboard('{{ base_url }}/{{ url.short_code }}/')" class="copy-btn">
                                     Copy
                                 </button>
                                 <a href="{% url 'qr_code_page' url.short_code %}" class="qr-btn">

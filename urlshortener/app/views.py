@@ -21,9 +21,11 @@ def home(request):
             url_obj.user = request.user if request.user.is_authenticated else None
             url_obj.short_code = generate_short_code()
             url_obj.save()
+            short_url = url_obj.get_short_url(request)
             return render(request, 'success.html', {
                 'short_code': url_obj.short_code,
-                'url_obj': url_obj
+                'url_obj': url_obj,
+                'short_url': short_url,
             })
     else:
         form = URLForm()
@@ -41,7 +43,8 @@ def redirect_short_url(request, code):
 @login_required
 def list_urls(request):
     urls = URL.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'list.html', {'urls': urls})
+    base_url = request.build_absolute_uri('/').rstrip('/')
+    return render(request, 'list.html', {'urls': urls, 'base_url': base_url})
 
 # Delete a short URL
 @login_required
