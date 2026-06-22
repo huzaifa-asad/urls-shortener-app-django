@@ -19,7 +19,7 @@
       "DJANGO_SETTINGS_MODULE": "urlshortener.settings"
     },
     "commands": [
-      "cd urlshortener && python manage.py migrate --noinput"
+      "python manage.py migrate --noinput"
     ]
   }
 }
