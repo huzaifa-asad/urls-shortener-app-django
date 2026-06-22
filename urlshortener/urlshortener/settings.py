@@ -25,11 +25,18 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-!fr4f-bhr4lit=$9q_r#v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
+# Allow local dev hosts even when DEBUG=False in .env
+_local_hosts = ['localhost', '127.0.0.1', '0.0.0.0', '[::1]']
 ALLOWED_HOSTS = [
     host.strip()
     for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.vercel.app').split(',')
     if host.strip()
 ]
+# Always ensure localhost is allowed when DEBUG is False
+# (for local dev testing with DEBUG=False)
+for h in _local_hosts:
+    if h not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(h)
 
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
@@ -40,8 +47,11 @@ CSRF_TRUSTED_ORIGINS = [
     if origin.strip()
 ]
 
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Proxy settings - only enable when NOT on a local development host
+_is_local = any(h in config('ALLOWED_HOSTS', default='') for h in _local_hosts)
+if not DEBUG and not _is_local:
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -73,7 +83,7 @@ ROOT_URLCONF = 'urlshortener.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -149,7 +159,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

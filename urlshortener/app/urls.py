@@ -7,7 +7,7 @@ urlpatterns = [
     path('list/', views.list_urls, name='list_urls'),
     path('delete/<int:pk>/', views.delete_url, name='delete_url'),
     path('register/', views.register, name='register'),
-    path('login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name='login'),
+    path('login/', views.custom_login, name='login'),
     path('logout/', views.custom_logout, name='logout'),
     path('analytics/', views.analytics_dashboard, name='analytics_dashboard'),
     path('analytics/data/', views.analytics_chart_data, name='analytics_chart_data'),

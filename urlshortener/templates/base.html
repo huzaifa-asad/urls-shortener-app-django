@@ -1,0 +1,111 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}URL Shortener{% endblock %} — ShortLink</title>
+    <meta name="description" content="{% block meta_description %}Transform long URLs into short, shareable links. Track clicks, generate QR codes, and manage all your links in one place.{% endblock %}">
+    <meta name="theme-color" content="#0284c7">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="navbar-brand">
+                <span class="navbar-brand-icon">
+                    <img src="{% static 'img/logo.png' %}" alt="ShortLink" style="width: 20px; height: 20px; object-fit: contain;">
+                </span>
+                
+            </a>
+            
+            <div class="navbar-links" id="navbarLinks">
+                <a href="{% url 'home' %}" class="navbar-link {% if request.path == '/' %}active{% endif %}">Home</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'list_urls' %}" class="navbar-link {% if 'list' in request.path %}active{% endif %}">My URLs</a>
+                    <a href="{% url 'analytics_dashboard' %}" class="navbar-link {% if 'analytics' in request.path %}active{% endif %}">Analytics</a>
+                {% endif %}
+            </div>
+            
+            <div class="navbar-actions">
+                {% if user.is_authenticated %}
+                    <span class="hide-mobile" style="font-size: 0.875rem; color: var(--color-text-secondary);">{{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="btn btn-ghost btn-sm">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-ghost btn-sm">Sign in</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Sign up</a>
+                {% endif %}
+                <button class="mobile-menu-toggle hide-desktop" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                <a href="{% url 'home' %}" class="navbar-brand" style="font-size: 1.125rem;">
+                        <span class="navbar-brand-icon">
+                            <img src="{% static 'img/logo.png' %}" alt="ShortLink" style="width: 20px; height: 20px; object-fit: contain;">
+                        </span>
+                        ShortLink
+                    </a>
+                    <p>The fastest way to shorten, share, and track your URLs. Free and open source.</p>
+                </div>
+                <div>
+                    <h4>Product</h4>
+                    <div class="footer-links">
+                        <a href="{% url 'home' %}">URL Shortener</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'list_urls' %}">My URLs</a>
+                            <a href="{% url 'analytics_dashboard' %}">Analytics</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <h4>Account</h4>
+                    <div class="footer-links">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'logout' %}">Logout</a>
+                        {% else %}
+                            <a href="{% url 'login' %}">Sign In</a>
+                            <a href="{% url 'register' %}">Create Account</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} ShortLink. All rights reserved.</p>
+                <p>Built with Django</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

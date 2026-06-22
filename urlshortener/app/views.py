@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import URL
-from .forms import UserRegisterForm, URLForm
+from .forms import UserRegisterForm, URLForm, CustomLoginForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from .utils import generate_short_code
@@ -44,7 +44,12 @@ def redirect_short_url(request, code):
 def list_urls(request):
     urls = URL.objects.filter(user=request.user).order_by('-created_at')
     base_url = request.build_absolute_uri('/').rstrip('/')
-    return render(request, 'list.html', {'urls': urls, 'base_url': base_url})
+    total_clicks = urls.aggregate(Sum('clicks'))['clicks__sum'] or 0
+    return render(request, 'list.html', {
+        'urls': urls,
+        'base_url': base_url,
+        'total_clicks': total_clicks,
+    })
 
 # Delete a short URL
 @login_required
@@ -52,6 +57,18 @@ def delete_url(request, pk):
     url_obj = get_object_or_404(URL, pk=pk)
     url_obj.delete()
     return redirect('list_urls')
+
+def custom_login(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomLoginForm()
+    return render(request, 'auth/login.html', {'form': form})
+
 
 def register(request):
     if request.method == 'POST':
