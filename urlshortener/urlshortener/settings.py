@@ -110,6 +110,16 @@ DATABASES = {
     }
 }
 
+# On Vercel, SQLite won't work due to read-only filesystem
+# Use in-memory SQLite as fallback
+if config('VERCEL', default=False, cast=bool):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
+
 DATABASE_URL = config('DATABASE_URL', default='')
 if DATABASE_URL:
     try:
