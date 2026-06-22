@@ -110,13 +110,12 @@ DATABASES = {
     }
 }
 
-# On Vercel, SQLite won't work due to read-only filesystem
-# Use in-memory SQLite as fallback
+# On Vercel, use /tmp which is writable
 if config('VERCEL', default=False, cast=bool):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
+            'NAME': '/tmp/db.sqlite3',
         }
     }
 

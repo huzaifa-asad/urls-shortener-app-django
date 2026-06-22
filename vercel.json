@@ -13,13 +13,5 @@
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/(.*)", "dest": "vercel-build.py" }
-  ],
-  "build": {
-    "env": {
-      "DJANGO_SETTINGS_MODULE": "urlshortener.settings"
-    },
-    "commands": [
-      "python manage.py migrate --noinput"
-    ]
-  }
+  ]
 }
