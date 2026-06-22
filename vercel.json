@@ -2,16 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "manage.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "urlshortener/static/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/api/index.py" }
-  ],
-  "build": {
-    "env": {
-      "DJANGO_SETTINGS_MODULE": "urlshortener.settings"
-    }
-  }
+    { "src": "/static/(.*)", "dest": "/static/$1" },
+    { "src": "/(.*)", "dest": "manage.py" }
+  ]
 }
