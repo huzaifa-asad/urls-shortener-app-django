@@ -2,17 +2,13 @@
   "version": 2,
   "builds": [
     {
-      "src": "manage.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
-    },
-    {
-      "src": "urlshortener/static/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "manage.py" }
+    { "src": "/static/(.*)", "dest": "/urlshortener/static/$1" },
+    { "src": "/(.*)", "dest": "/api/index.py" }
   ],
   "build": {
     "env": {

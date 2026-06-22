@@ -7,5 +7,6 @@ pillow==12.2.0
 psycopg[binary]==3.3.4
 python-decouple==3.8
 qrcode==8.2
+whitenoise==6.7.0
 sqlparse==0.5.5
 tzdata==2026.2
