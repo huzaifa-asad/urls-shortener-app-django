@@ -1,17 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "vercel-build.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "urlshortener/static/**",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "vercel-build.py" }
+    { "src": "/(.*)", "dest": "/api/index.py" }
   ]
 }
