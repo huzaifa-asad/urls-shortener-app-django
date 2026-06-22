@@ -13,11 +13,5 @@
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/(.*)", "dest": "manage.py" }
-  ],
-  "build": {
-    "env": {
-      "DJANGO_SETTINGS_MODULE": "urlshortener.settings",
-      "DISABLE_COLLECTSTATIC": "1"
-    }
-  }
+  ]
 }
