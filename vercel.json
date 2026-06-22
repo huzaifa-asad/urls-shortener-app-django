@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "manage.py",
+      "src": "vercel-build.py",
       "use": "@vercel/python"
     },
     {
@@ -12,6 +12,6 @@
   ],
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "manage.py" }
+    { "src": "/(.*)", "dest": "vercel-build.py" }
   ]
 }
