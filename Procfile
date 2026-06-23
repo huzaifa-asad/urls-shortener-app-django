@@ -1,1 +1,1 @@
-web: cd urlshortener && python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn urlshortener.wsgi --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+web: python urlshortener/manage.py migrate --noinput && python urlshortener/manage.py collectstatic --noinput && gunicorn urlshortener.wsgi --chdir urlshortener --bind 0.0.0.0:$PORT --workers 2 --timeout 120
