@@ -164,7 +164,6 @@ db.sqlite3
 db.sqlite3-journal
 media/
 staticfiles/
-static/
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -189,7 +188,6 @@ local_settings.py
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/stable/howto/static-files/
-/static/
 /staticfiles/
 
 # Node.js dependencies (if using frontend tools)
