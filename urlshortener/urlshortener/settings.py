@@ -13,6 +13,7 @@ from pathlib import Path
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = /app/urlshortener/ (outer directory with static/, templates/)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -85,7 +86,7 @@ ROOT_URLCONF = 'urlshortener.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.parent / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -172,9 +173,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR.parent / 'static',
+    BASE_DIR / 'static',
 ]
-STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
     'default': {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
