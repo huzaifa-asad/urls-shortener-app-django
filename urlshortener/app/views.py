@@ -60,7 +60,7 @@ def delete_url(request, pk):
 
 def custom_login(request):
     if request.method == 'POST':
-        form = CustomLoginForm(request, data=request.POST)
+        form = CustomLoginForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
