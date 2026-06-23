@@ -33,9 +33,8 @@ ALLOWED_HOSTS = [
     for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.railway.app,.up.railway.app').split(',')
     if host.strip()
 ]
-# Always ensure localhost is allowed when DEBUG is False
-# (for local dev testing with DEBUG=False)
-for h in _local_hosts:
+# Always ensure localhost and railway domains are allowed
+for h in _local_hosts + ['.railway.app', '.up.railway.app']:
     if h not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(h)
 
@@ -173,7 +172,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    d for d in [BASE_DIR / 'static'] if d.is_dir()
+    BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
@@ -184,6 +183,7 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
+WHITENOISE_MANIFEST_STRICT = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
