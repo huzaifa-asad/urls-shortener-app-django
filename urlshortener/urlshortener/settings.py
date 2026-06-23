@@ -29,7 +29,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 _local_hosts = ['localhost', '127.0.0.1', '0.0.0.0', '[::1]']
 ALLOWED_HOSTS = [
     host.strip()
-    for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.vercel.app').split(',')
+    for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.railway.app,.up.railway.app').split(',')
     if host.strip()
 ]
 # Always ensure localhost is allowed when DEBUG is False
@@ -42,7 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in config(
         'CSRF_TRUSTED_ORIGINS',
-        default='http://localhost:8000,http://127.0.0.1:8000,https://*.vercel.app'
+        default='http://localhost:8000,http://127.0.0.1:8000,https://*.railway.app,https://*.up.railway.app'
     ).split(',')
     if origin.strip()
 ]
@@ -65,11 +65,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'app',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -108,15 +110,16 @@ DATABASES = {
     }
 }
 
-# On Vercel, use /tmp which is writable
-if config('VERCEL', default=False, cast=bool):
+# On Railway, use a persistent volume for SQLite
+if config('RAILWAY_VOLUME_MOUNT_PATH', default=''):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/tmp/db.sqlite3',
+            'NAME': config('RAILWAY_VOLUME_MOUNT_PATH') + '/db.sqlite3',
         }
     }
 
+# Use DATABASE_URL if provided (PostgreSQL on Railway)
 DATABASE_URL = config('DATABASE_URL', default='')
 if DATABASE_URL:
     try:
@@ -131,7 +134,6 @@ if DATABASE_URL:
     except Exception as e:
         import sys
         print(f"Warning: Failed to parse DATABASE_URL: {e}", file=sys.stderr)
-        # Fall back to SQLite if parsing fails
 
 
 # Password validation
@@ -172,12 +174,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
     'default': {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
 
