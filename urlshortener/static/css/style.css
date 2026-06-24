@@ -108,7 +108,7 @@ ul { list-style: none; }
 }
 .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .navbar-brand {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 0;
   font-weight: 800; font-size: 1.25rem;
   background: var(--gradient-water);
   -webkit-background-clip: text;
@@ -116,7 +116,7 @@ ul { list-style: none; }
   background-clip: text;
 }
 .navbar-brand img {
-  height: 36px; width: auto;
+  height: 44px; width: auto;
   -webkit-text-fill-color: initial;
   background: none;
   background-clip: initial;
