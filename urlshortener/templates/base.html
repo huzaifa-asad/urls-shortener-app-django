@@ -28,6 +28,9 @@
                 {% if user.is_authenticated %}
                     <a href="{% url 'list_urls' %}" class="navbar-link {% if 'list' in request.path %}active{% endif %}">My URLs</a>
                     <a href="{% url 'analytics_dashboard' %}" class="navbar-link {% if 'analytics' in request.path %}active{% endif %}">Analytics</a>
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'list_urls' %}" class="navbar-link">My URLs</a>
+                    <a href="{% url 'login' %}?next={% url 'analytics_dashboard' %}" class="navbar-link">Analytics</a>
                 {% endif %}
             </div>
             
